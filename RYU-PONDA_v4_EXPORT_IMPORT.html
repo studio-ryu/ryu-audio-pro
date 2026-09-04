@@ -1,0 +1,1819 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>RYU PONDA</title>
+
+<style>
+* {
+  box-sizing: border-box;
+  user-select: none;
+}
+
+html, body {
+  margin: 0;
+  width: 100%;
+  height: 100%;
+  background: #090909;
+  color: #ddd;
+  font-family: Arial, "Noto Sans JP", sans-serif;
+  overflow: hidden;
+}
+
+body {
+  display: flex;
+  flex-direction: column;
+}
+
+/* ===== HEADER ===== */
+
+.header {
+  height: 58px;
+  background: #111;
+  border-bottom: 1px solid #292929;
+  display: flex;
+  align-items: center;
+  padding: 0 18px;
+  gap: 20px;
+}
+
+.logo {
+  font-size: 18px;
+  font-weight: 700;
+  letter-spacing: 2px;
+  color: #eee;
+}
+
+.status {
+  font-size: 12px;
+  color: #777;
+}
+
+.status::before {
+  content: "";
+  display: inline-block;
+  width: 7px;
+  height: 7px;
+  background: #4caf50;
+  border-radius: 50%;
+  margin-right: 7px;
+}
+
+/* ===== PROJECT CONTROLS ===== */
+
+.project-controls {
+  margin-left: auto;
+  display: flex;
+  align-items: center;
+  gap: 6px;
+}
+
+.project-controls button {
+  height: 30px;
+  padding: 0 12px;
+  border: 1px solid #303030;
+  background: #181818;
+  color: #999;
+  cursor: pointer;
+  font-size: 10px;
+  letter-spacing: 1px;
+}
+
+.project-controls button:hover {
+  background: #222;
+  color: #ddd;
+}
+
+#saveStatus {
+  min-width: 50px;
+  color: #555;
+  font-size: 9px;
+}
+
+/* ===== MONITOR ===== */
+
+.monitor-area {
+  height: 245px;
+  min-height: 245px;
+  padding: 14px 18px;
+  display: flex;
+  gap: 18px;
+}
+
+.monitor {
+  width: 360px;
+  height: 100%;
+  background: #000;
+  border: 1px solid #303030;
+  position: relative;
+  overflow: hidden;
+}
+
+.monitor video {
+  width: 100%;
+  height: 100%;
+  object-fit: contain;
+  display: none;
+  background: #000;
+}
+
+.monitor-empty {
+  width: 100%;
+  height: 100%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: #444;
+  font-size: 13px;
+  letter-spacing: 1px;
+}
+
+.monitor-info {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+}
+
+.now-playing-label {
+  color: #555;
+  font-size: 11px;
+  letter-spacing: 2px;
+  margin-bottom: 10px;
+}
+
+.now-playing {
+  font-size: 22px;
+  color: #eee;
+  margin-bottom: 8px;
+}
+
+.now-status {
+  color: #777;
+  font-size: 12px;
+}
+
+/* ===== CHANNEL AREA ===== */
+
+.channel-area {
+  flex: 1;
+  min-height: 0;
+  overflow-x: auto;
+  overflow-y: hidden;
+  padding: 0 18px 18px;
+}
+
+.channels {
+  height: 100%;
+  display: flex;
+  gap: 10px;
+  align-items: stretch;
+}
+
+.channel {
+  width: 205px;
+  min-width: 205px;
+  background: #111;
+  border: 1px solid #292929;
+  display: flex;
+  flex-direction: column;
+  padding: 10px;
+  position: relative;
+}
+
+.channel.playing {
+  border-color: #555;
+  background: #141414;
+}
+
+.channel-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 8px;
+}
+
+.channel-number {
+  font-size: 11px;
+  letter-spacing: 1px;
+  color: #777;
+}
+
+.channel-state {
+  font-size: 9px;
+  color: #555;
+}
+
+.channel.playing .channel-state {
+  color: #62b56b;
+}
+
+/* file */
+
+.file-button {
+  height: 35px;
+  background: #191919;
+  border: 1px solid #303030;
+  color: #aaa;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 11px;
+  margin-bottom: 8px;
+}
+
+.file-button:hover {
+  background: #202020;
+  color: #ddd;
+}
+
+.file-name {
+  height: 31px;
+  border-bottom: 1px solid #292929;
+  font-size: 10px;
+  color: #666;
+  display: flex;
+  align-items: center;
+  overflow: hidden;
+  white-space: nowrap;
+  text-overflow: ellipsis;
+  margin-bottom: 8px;
+}
+
+/* waveform */
+
+.waveform {
+  height: 38px;
+  background: #0b0b0b;
+  border: 1px solid #202020;
+  margin-bottom: 9px;
+  position: relative;
+  overflow: hidden;
+}
+
+.waveform canvas {
+  width: 100%;
+  height: 100%;
+}
+
+/* buttons */
+
+.controls {
+  display: flex;
+  flex-direction: column;
+  gap: 7px;
+}
+
+.start {
+  height: 44px;
+  border: 1px solid #3b5140;
+  background: #18201a;
+  color: #82b889;
+  cursor: pointer;
+  font-size: 13px;
+  font-weight: bold;
+  letter-spacing: 1px;
+}
+
+.start:hover {
+  background: #203025;
+}
+
+.start:active {
+  background: #29402d;
+}
+
+.stop {
+  height: 38px;
+  margin-top: 5px;
+  border: 1px solid #4a3030;
+  background: #211515;
+  color: #bd7777;
+  cursor: pointer;
+  font-size: 12px;
+  letter-spacing: 1px;
+}
+
+.stop:hover {
+  background: #2b1b1b;
+}
+
+.fade-row {
+  display: flex;
+  gap: 6px;
+  margin-top: 4px;
+}
+
+.fade {
+  flex: 1;
+  height: 30px;
+  border: 1px solid #303030;
+  background: #181818;
+  color: #999;
+  cursor: pointer;
+  font-size: 10px;
+}
+
+.fade:hover {
+  background: #222;
+  color: #ddd;
+}
+
+/* volume */
+
+.volume-area {
+  margin-top: 10px;
+  padding-top: 8px;
+  border-top: 1px solid #252525;
+}
+
+.volume-title {
+  display: flex;
+  justify-content: space-between;
+  color: #666;
+  font-size: 9px;
+  margin-bottom: 5px;
+}
+
+.volume {
+  width: 100%;
+  accent-color: #777;
+  cursor: pointer;
+}
+
+.options {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-top: 7px;
+}
+
+.loop {
+  font-size: 10px;
+  color: #777;
+  display: flex;
+  align-items: center;
+  gap: 5px;
+  cursor: pointer;
+}
+
+.loop input {
+  accent-color: #777;
+}
+
+/* delete channel */
+
+.delete-channel {
+  margin-top: auto;
+  height: 30px;
+  min-height: 30px;
+  border: 1px solid #3a2929;
+  background: #151010;
+  color: #8d6666;
+  cursor: pointer;
+  font-size: 10px;
+  letter-spacing: 1px;
+}
+
+.delete-channel:hover {
+  background: #211515;
+  color: #bd8585;
+}
+
+.delete-channel:active {
+  background: #2b1b1b;
+}
+
+/* seek bar */
+
+.seek-area {
+  margin: 1px 0 8px;
+}
+
+.seek-time {
+  display: flex;
+  justify-content: space-between;
+  color: #666;
+  font-size: 9px;
+  margin-bottom: 2px;
+}
+
+.seek {
+  width: 100%;
+  height: 16px;
+  margin: 0;
+  accent-color: #777;
+  cursor: pointer;
+}
+
+/* add channel */
+
+.add-channel {
+  width: 110px;
+  min-width: 110px;
+  border: 1px dashed #303030;
+  background: #0d0d0d;
+  color: #555;
+  cursor: pointer;
+  font-size: 11px;
+}
+
+.add-channel:hover {
+  border-color: #555;
+  color: #aaa;
+}
+
+/* ===== FOOTER ===== */
+
+.footer {
+  height: 38px;
+  min-height: 38px;
+  background: #0e0e0e;
+  border-top: 1px solid #252525;
+  display: flex;
+  align-items: center;
+  padding: 0 18px;
+  color: #555;
+  font-size: 10px;
+}
+
+.master {
+  margin-left: auto;
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
+.master-meter {
+  width: 130px;
+  height: 5px;
+  background: #222;
+  overflow: hidden;
+}
+
+.master-meter-fill {
+  width: 0%;
+  height: 100%;
+  background: #777;
+}
+
+/* touch */
+
+button,
+input,
+label {
+  touch-action: manipulation;
+}
+
+@media (max-width: 700px) {
+  .project-controls {
+    gap: 3px;
+  }
+
+  .project-controls button {
+    padding: 0 7px;
+  }
+
+  #saveStatus {
+    display: none;
+  }
+
+  .monitor-area {
+    height: 210px;
+    min-height: 210px;
+  }
+
+  .monitor {
+    width: 280px;
+  }
+
+  .channel {
+    width: 190px;
+    min-width: 190px;
+  }
+}
+</style>
+</head>
+
+<body>
+
+<header class="header">
+  <div class="logo">RYU PONDA</div>
+  <div class="status" id="systemStatus">READY</div>
+  <div class="project-controls">
+    <button id="saveProject">SAVE</button>
+    <button id="loadProject">LOAD</button>
+    <button id="exportProject">EXPORT</button>
+    <button id="importProject">IMPORT</button>
+    <button id="newProject">NEW</button>
+    <input type="file" id="importFile" accept=".ryup,application/json" hidden>
+    <span id="saveStatus"></span>
+  </div>
+</header>
+
+<section class="monitor-area">
+
+  <div class="monitor">
+    <div class="monitor-empty" id="monitorEmpty">
+      NO VIDEO
+    </div>
+
+    <video id="monitorVideo" playsinline></video>
+  </div>
+
+  <div class="monitor-info">
+    <div class="now-playing-label">NOW PLAYING</div>
+    <div class="now-playing" id="nowPlaying">—</div>
+    <div class="now-status" id="nowStatus">No channel selected</div>
+  </div>
+
+</section>
+
+<section class="channel-area">
+  <div class="channels" id="channels"></div>
+</section>
+
+<footer class="footer">
+  <span>RYU PONDA · WEB AUDIO PLAYER</span>
+
+  <div class="master">
+    <span>MASTER</span>
+    <div class="master-meter">
+      <div class="master-meter-fill" id="masterMeter"></div>
+    </div>
+  </div>
+</footer>
+
+<script>
+/* =========================================================
+   RYU PONDA
+   Simple browser sound cue system
+   ========================================================= */
+
+let audioContext = null;
+let masterGain = null;
+
+let channels = [];
+let currentChannel = null;
+let channelId = 0;
+
+const monitorVideo = document.getElementById("monitorVideo");
+const monitorEmpty = document.getElementById("monitorEmpty");
+const nowPlaying = document.getElementById("nowPlaying");
+const nowStatus = document.getElementById("nowStatus");
+const channelsContainer = document.getElementById("channels");
+
+monitorVideo.addEventListener("timeupdate", () => {
+  if (!currentChannel || currentChannel.fileType !== "mp4") return;
+
+  currentChannel.position = monitorVideo.currentTime || 0;
+
+  const el = document.querySelector(
+    `.channel[data-id="${currentChannel.id}"]`
+  );
+
+  if (el) updateSeekUI(currentChannel, el);
+});
+
+monitorVideo.addEventListener("ended", () => {
+  if (!currentChannel || currentChannel.loop) return;
+  currentChannel.position = 0;
+  stopChannel(currentChannel);
+});
+
+function createAudioContext() {
+
+  if (!audioContext) {
+
+    audioContext = new (
+      window.AudioContext ||
+      window.webkitAudioContext
+    )();
+
+    masterGain = audioContext.createGain();
+    masterGain.gain.value = 1;
+
+    masterGain.connect(audioContext.destination);
+  }
+
+  if (audioContext.state === "suspended") {
+    audioContext.resume();
+  }
+}
+
+
+/* =========================================================
+   CHANNEL
+   ========================================================= */
+
+function addChannel() {
+
+  const oldAdd = channelsContainer.querySelector(".add-channel");
+  if (oldAdd) oldAdd.remove();
+
+  const id = ++channelId;
+
+  const channel = {
+    id,
+    file: null,
+    url: null,
+    audio: null,
+    source: null,
+    gain: null,
+    playing: false,
+    loop: false,
+    fading: false,
+    fileType: null,
+    buffer: null,
+    position: 0
+  };
+
+  channels.push(channel);
+
+  renderChannel(channel);
+  addAddButton();
+}
+
+
+/* =========================================================
+   RENDER
+   ========================================================= */
+
+function renderChannel(channel) {
+
+  const el = document.createElement("div");
+
+  el.className = "channel";
+
+  el.dataset.id = channel.id;
+
+  el.innerHTML = `
+    <div class="channel-header">
+      <div class="channel-number">
+        CH ${channel.id}
+      </div>
+
+      <div class="channel-state">
+        EMPTY
+      </div>
+    </div>
+
+    <label class="file-button">
+      FILE SELECT
+      <input
+        type="file"
+        accept=".wav,.mp3,.mp4,audio/wav,audio/mpeg,video/mp4"
+        hidden
+      >
+    </label>
+
+    <div class="file-name">
+      No file
+    </div>
+
+    <div class="waveform">
+      <canvas></canvas>
+    </div>
+
+    <div class="seek-area">
+      <div class="seek-time">
+        <span class="current-time">00:00</span>
+        <span class="duration">00:00</span>
+      </div>
+      <input class="seek" type="range" min="0" max="0" step="0.01" value="0">
+    </div>
+
+    <div class="controls">
+
+      <button class="start">
+        START
+      </button>
+
+      <button class="stop">
+        STOP
+      </button>
+
+      <div class="fade-row">
+        <button class="fade fade-in">
+          FADE IN
+        </button>
+
+        <button class="fade fade-out">
+          FADE OUT
+        </button>
+      </div>
+
+    </div>
+
+    <div class="volume-area">
+
+      <div class="volume-title">
+        <span>LEVEL</span>
+        <span class="volume-value">100%</span>
+      </div>
+
+      <input
+        class="volume"
+        type="range"
+        min="0"
+        max="100"
+        value="100"
+      >
+
+    </div>
+
+    <div class="options">
+
+      <label class="loop">
+        <input type="checkbox" class="loop-check">
+        LOOP
+      </label>
+
+    </div>
+
+    <button class="delete-channel">
+      DELETE CHANNEL
+    </button>
+  `;
+
+  channelsContainer.appendChild(el);
+
+  const fileInput = el.querySelector("input[type=file]");
+  const fileName = el.querySelector(".file-name");
+  const startButton = el.querySelector(".start");
+  const stopButton = el.querySelector(".stop");
+  const fadeInButton = el.querySelector(".fade-in");
+  const fadeOutButton = el.querySelector(".fade-out");
+  const volume = el.querySelector(".volume");
+  const volumeValue = el.querySelector(".volume-value");
+  const loopCheck = el.querySelector(".loop-check");
+  const seek = el.querySelector(".seek");
+  const currentTime = el.querySelector(".current-time");
+  const duration = el.querySelector(".duration");
+  const deleteButton = el.querySelector(".delete-channel");
+
+  fileInput.addEventListener("change", async e => {
+
+    const file = e.target.files[0];
+
+    if (!file) return;
+
+    await loadFile(channel, file, el, fileName);
+
+  });
+
+  startButton.addEventListener("click", () => {
+    startChannel(channel);
+  });
+
+  stopButton.addEventListener("click", () => {
+    stopChannel(channel);
+  });
+
+  fadeInButton.addEventListener("click", () => {
+    fadeIn(channel);
+  });
+
+  fadeOutButton.addEventListener("click", () => {
+    fadeOut(channel);
+  });
+
+  volume.addEventListener("input", () => {
+
+    const value = Number(volume.value);
+
+    volumeValue.textContent = value + "%";
+
+    if (channel.gain) {
+      channel.gain.gain.value = value / 100;
+    }
+
+    if (channel.audio) {
+      channel.audio.volume = value / 100;
+    }
+
+  });
+
+  loopCheck.addEventListener("change", () => {
+
+    channel.loop = loopCheck.checked;
+
+    if (channel.audio) {
+      channel.audio.loop = channel.loop;
+    }
+
+  });
+
+  deleteButton.addEventListener("click", () => {
+
+    if (channels.length <= 1) {
+      alert("削除できません");
+      return;
+    }
+
+    if (channel.playing) {
+      alert("再生中のチャンネルは削除できません");
+      return;
+    }
+
+    if (channel.url) {
+      URL.revokeObjectURL(channel.url);
+    }
+
+    channels = channels.filter(c => c !== channel);
+    el.remove();
+    addAddButton();
+
+  });
+
+  seek.addEventListener("input", () => {
+    const position = Number(seek.value);
+    channel.position = position;
+
+    if (channel.audio) {
+      try {
+        channel.audio.currentTime = position;
+      } catch {}
+    }
+
+    if (channel.fileType === "mp4" && currentChannel === channel) {
+      try {
+        monitorVideo.currentTime = position;
+      } catch {}
+    }
+
+    currentTime.textContent = formatTime(position);
+  });  return el;
+}
+
+
+/* =========================================================
+   LOAD FILE
+   ========================================================= */
+
+async function loadFile(channel, file, element, fileNameElement) {
+
+  stopChannel(channel);
+
+  channel.file = file;
+
+  fileNameElement.textContent = file.name;
+
+  const ext = file.name.split(".").pop().toLowerCase();
+
+  channel.fileType = ext;
+
+  if (channel.url) {
+    URL.revokeObjectURL(channel.url);
+  }
+
+  channel.url = URL.createObjectURL(file);
+
+  const state = element.querySelector(".channel-state");
+
+  state.textContent = "LOADING";
+  state.style.color = "#777";
+
+  if (ext === "mp4") {
+
+    channel.audio = new Audio(channel.url);
+    channel.audio.preload = "auto";
+    channel.audio.loop = channel.loop;
+    channel.audio.volume = getChannelVolume(channel);
+
+    await waitForMedia(channel.audio);
+
+    state.textContent = "READY";
+
+  } else {
+
+    channel.audio = new Audio(channel.url);
+    channel.audio.preload = "auto";
+    channel.audio.loop = channel.loop;
+
+    channel.audio.volume = 1;
+
+    await waitForMedia(channel.audio);
+
+    state.textContent = "READY";
+  }
+
+  updateSeekUI(channel, element);
+  drawIdleWaveform(element);
+}
+
+
+function waitForMedia(audio) {
+
+  return new Promise(resolve => {
+
+    if (audio.readyState >= 3) {
+      resolve();
+      return;
+    }
+
+    audio.addEventListener("canplaythrough", resolve, {
+      once: true
+    });
+
+    audio.addEventListener("error", resolve, {
+      once: true
+    });
+
+  });
+}
+
+
+/* =========================================================
+   START
+   ========================================================= */
+
+async function startChannel(channel) {
+
+  if (!channel.audio) {
+
+    alert("先にファイルを選択してください。");
+
+    return;
+  }
+
+  createAudioContext();
+
+  /*
+    他のチャンネルを停止
+  */
+
+  for (const other of channels) {
+
+    if (other !== channel) {
+      stopChannel(other);
+    }
+
+  }
+
+  currentChannel = channel;
+
+  const element =
+    document.querySelector(
+      `.channel[data-id="${channel.id}"]`
+    );
+
+  channel.playing = true;
+
+  element.classList.add("playing");
+
+  element.querySelector(".channel-state").textContent =
+    "PLAYING";
+
+  nowPlaying.textContent = channel.file.name;
+
+  nowStatus.textContent =
+    `CH ${channel.id} · PLAYING`;
+
+  /*
+    MP4
+  */
+
+  if (channel.fileType === "mp4") {
+
+    monitorVideo.src = channel.url;
+
+    monitorVideo.currentTime = channel.position || 0;
+
+    monitorVideo.style.display = "block";
+    monitorEmpty.style.display = "none";
+
+    monitorVideo.volume =
+      getChannelVolume(channel);
+
+    await monitorVideo.play();
+
+  } else {
+
+    resetMonitor();
+
+    channel.audio.currentTime = channel.position || 0;
+
+    channel.audio.volume =
+      getChannelVolume(channel);
+
+    await channel.audio.play();
+
+  }
+
+  animateWaveform(channel, element);
+
+}
+
+
+/* =========================================================
+   STOP
+   ========================================================= */
+
+function stopChannel(channel) {
+
+  if (!channel) return;
+
+  if (channel.audio) {
+
+    channel.audio.pause();
+
+    try {
+      channel.position = channel.audio.currentTime;
+    } catch {}
+
+  }
+
+  if (
+    currentChannel === channel &&
+    channel.fileType === "mp4"
+  ) {
+
+    try {
+      channel.position = monitorVideo.currentTime || channel.position || 0;
+    } catch {}
+
+    monitorVideo.pause();
+
+    monitorVideo.removeAttribute("src");
+
+    monitorVideo.load();
+
+    resetMonitor();
+
+  }
+
+  channel.playing = false;
+
+  const element =
+    document.querySelector(
+      `.channel[data-id="${channel.id}"]`
+    );
+
+  if (element) {
+
+    element.classList.remove("playing");
+
+    const state =
+      element.querySelector(".channel-state");
+
+    state.textContent =
+      channel.file ? "READY" : "EMPTY";
+
+    state.style.color = "";
+  }
+
+  if (currentChannel === channel) {
+
+    currentChannel = null;
+
+    nowPlaying.textContent = "—";
+    nowStatus.textContent = "No channel selected";
+
+  }
+}
+
+
+/* =========================================================
+   VOLUME
+   ========================================================= */
+
+function getChannelVolume(channel) {
+
+  const element =
+    document.querySelector(
+      `.channel[data-id="${channel.id}"]`
+    );
+
+  if (!element) return 1;
+
+  return Number(
+    element.querySelector(".volume").value
+  ) / 100;
+}
+
+
+/* =========================================================
+   FADE IN
+   ========================================================= */
+
+function fadeIn(channel) {
+
+  if (!channel.audio) return;
+
+  if (!channel.playing) {
+
+    startChannel(channel);
+
+    setTimeout(() => {
+      performFadeIn(channel);
+    }, 50);
+
+    return;
+  }
+
+  performFadeIn(channel);
+}
+
+
+function performFadeIn(channel) {
+
+  const target =
+    getChannelVolume(channel);
+
+  const start = performance.now();
+  const duration = 1000;
+
+  if (channel.fileType === "mp4") {
+
+    monitorVideo.volume = 0;
+
+    function step(time) {
+
+      const progress =
+        Math.min((time - start) / duration, 1);
+
+      monitorVideo.volume =
+        target * progress;
+
+      if (progress < 1) {
+        requestAnimationFrame(step);
+      }
+
+    }
+
+    requestAnimationFrame(step);
+
+  } else {
+
+    channel.audio.volume = 0;
+
+    function step(time) {
+
+      const progress =
+        Math.min((time - start) / duration, 1);
+
+      channel.audio.volume =
+        target * progress;
+
+      if (progress < 1) {
+        requestAnimationFrame(step);
+      }
+
+    }
+
+    requestAnimationFrame(step);
+  }
+}
+
+
+/* =========================================================
+   FADE OUT
+   ========================================================= */
+
+function fadeOut(channel) {
+
+  if (!channel.audio || !channel.playing) return;
+
+  const startVolume =
+    channel.fileType === "mp4"
+      ? monitorVideo.volume
+      : channel.audio.volume;
+
+  const start = performance.now();
+  const duration = 1000;
+
+  function step(time) {
+
+    const progress =
+      Math.min((time - start) / duration, 1);
+
+    const volume =
+      startVolume * (1 - progress);
+
+    if (channel.fileType === "mp4") {
+      monitorVideo.volume = volume;
+    } else {
+      channel.audio.volume = volume;
+    }
+
+    if (progress < 1) {
+
+      requestAnimationFrame(step);
+
+    } else {
+
+      stopChannel(channel);
+
+    }
+
+  }
+
+  requestAnimationFrame(step);
+}
+
+
+/* =========================================================
+   SEEK / TIME
+   ========================================================= */
+
+function formatTime(seconds) {
+  if (!Number.isFinite(seconds) || seconds < 0) return "00:00";
+
+  const total = Math.floor(seconds);
+  const hours = Math.floor(total / 3600);
+  const minutes = Math.floor((total % 3600) / 60);
+  const secs = total % 60;
+
+  if (hours > 0) {
+    return String(hours).padStart(2, "0") + ":" +
+           String(minutes).padStart(2, "0") + ":" +
+           String(secs).padStart(2, "0");
+  }
+
+  return String(minutes).padStart(2, "0") + ":" +
+         String(secs).padStart(2, "0");
+}
+
+function updateSeekUI(channel, element) {
+  const seek = element.querySelector(".seek");
+  const currentTime = element.querySelector(".current-time");
+  const duration = element.querySelector(".duration");
+
+  const media = channel.fileType === "mp4"
+    ? monitorVideo
+    : channel.audio;
+
+  if (!media) return;
+
+  const d = Number.isFinite(media.duration) ? media.duration : 0;
+
+  seek.max = d;
+  seek.value = Math.min(channel.position || 0, d);
+
+  currentTime.textContent = formatTime(channel.position || 0);
+  duration.textContent = formatTime(d);
+}
+
+function updateAllSeekBars() {
+  for (const channel of channels) {
+    const element = document.querySelector(
+      `.channel[data-id="${channel.id}"]`
+    );
+
+    if (!element || !channel.audio) continue;
+
+    const media = channel.fileType === "mp4" &&
+                  currentChannel === channel
+      ? monitorVideo
+      : channel.audio;
+
+    if (channel.playing) {
+      channel.position = media.currentTime || 0;
+    }
+
+    updateSeekUI(channel, element);
+  }
+}
+
+setInterval(updateAllSeekBars, 100);
+
+/* =========================================================
+   MONITOR
+   ========================================================= */
+
+function resetMonitor() {
+
+  monitorVideo.pause();
+
+  monitorVideo.style.display = "none";
+
+  monitorEmpty.style.display = "flex";
+
+}
+
+
+/* =========================================================
+   WAVEFORM
+   ========================================================= */
+
+function drawIdleWaveform(element) {
+
+  const canvas =
+    element.querySelector("canvas");
+
+  const ctx = canvas.getContext("2d");
+
+  const width = canvas.width =
+    canvas.clientWidth * devicePixelRatio;
+
+  const height = canvas.height =
+    canvas.clientHeight * devicePixelRatio;
+
+  ctx.clearRect(0, 0, width, height);
+
+  ctx.strokeStyle = "#333";
+  ctx.lineWidth = 1;
+
+  ctx.beginPath();
+
+  ctx.moveTo(0, height / 2);
+  ctx.lineTo(width, height / 2);
+
+  ctx.stroke();
+}
+
+
+function animateWaveform(channel, element) {
+
+  const canvas =
+    element.querySelector("canvas");
+
+  const ctx = canvas.getContext("2d");
+
+  const width =
+    canvas.width =
+    canvas.clientWidth * devicePixelRatio;
+
+  const height =
+    canvas.height =
+    canvas.clientHeight * devicePixelRatio;
+
+  function draw() {
+
+    if (!channel.playing) {
+
+      drawIdleWaveform(element);
+
+      return;
+    }
+
+    ctx.clearRect(0, 0, width, height);
+
+    ctx.strokeStyle = "#777";
+    ctx.lineWidth = 1.5;
+
+    ctx.beginPath();
+
+    const t = performance.now() / 150;
+
+    for (let x = 0; x < width; x += 3) {
+
+      const wave =
+        Math.sin(x * 0.035 + t) *
+        Math.sin(x * 0.012 + t * 0.7);
+
+      const y =
+        height / 2 +
+        wave * height * 0.32;
+
+      if (x === 0) {
+        ctx.moveTo(x, y);
+      } else {
+        ctx.lineTo(x, y);
+      }
+
+    }
+
+    ctx.stroke();
+
+    requestAnimationFrame(draw);
+  }
+
+  draw();
+}
+
+
+/* =========================================================
+   PROJECT SAVE / LOAD
+   ========================================================= */
+
+const DB_NAME = "RYU_PONDA_DB";
+const DB_VERSION = 1;
+const STORE_NAME = "project";
+
+function openProjectDB() {
+  return new Promise((resolve, reject) => {
+    const request = indexedDB.open(DB_NAME, DB_VERSION);
+
+    request.onupgradeneeded = () => {
+      const db = request.result;
+      if (!db.objectStoreNames.contains(STORE_NAME)) {
+        db.createObjectStore(STORE_NAME);
+      }
+    };
+
+    request.onsuccess = () => resolve(request.result);
+    request.onerror = () => reject(request.error);
+  });
+}
+
+function setSaveStatus(text) {
+  const el = document.getElementById("saveStatus");
+  if (!el) return;
+  el.textContent = text;
+  clearTimeout(setSaveStatus.timer);
+  setSaveStatus.timer = setTimeout(() => el.textContent = "", 2200);
+}
+
+async function saveProject() {
+  try {
+    const data = channels.map(channel => {
+      const el = document.querySelector(
+        `.channel[data-id="${channel.id}"]`
+      );
+
+      return {
+        id: channel.id,
+        file: channel.file,
+        fileName: channel.file ? channel.file.name : null,
+        fileType: channel.fileType,
+        volume: el ? Number(el.querySelector(".volume").value) : 100,
+        loop: channel.loop,
+        position: channel.position || 0
+      };
+    });
+
+    const db = await openProjectDB();
+
+    await new Promise((resolve, reject) => {
+      const tx = db.transaction(STORE_NAME, "readwrite");
+      tx.objectStore(STORE_NAME).put(data, "default");
+      tx.oncomplete = resolve;
+      tx.onerror = () => reject(tx.error);
+    });
+
+    db.close();
+    setSaveStatus("SAVED");
+  } catch (e) {
+    console.error(e);
+    setSaveStatus("ERROR");
+    alert("保存に失敗しました。");
+  }
+}
+
+async function loadProject() {
+  try {
+    if (currentChannel) stopChannel(currentChannel);
+
+    const db = await openProjectDB();
+
+    const data = await new Promise((resolve, reject) => {
+      const tx = db.transaction(STORE_NAME, "readonly");
+      const req = tx.objectStore(STORE_NAME).get("default");
+      req.onsuccess = () => resolve(req.result);
+      req.onerror = () => reject(req.error);
+    });
+
+    db.close();
+
+    if (!data) {
+      alert("保存されたプロジェクトがありません。");
+      return;
+    }
+
+    for (const c of channels) {
+      if (c.url) URL.revokeObjectURL(c.url);
+    }
+
+    channels = [];
+    currentChannel = null;
+    channelId = 0;
+    channelsContainer.innerHTML = "";
+
+    for (const saved of data) {
+      const channel = {
+        id: Number(saved.id),
+        file: null,
+        url: null,
+        audio: null,
+        source: null,
+        gain: null,
+        playing: false,
+        loop: !!saved.loop,
+        fading: false,
+        fileType: saved.fileType || null,
+        buffer: null,
+        position: Number(saved.position) || 0
+      };
+
+      channels.push(channel);
+      channelId = Math.max(channelId, channel.id);
+
+      const el = renderChannel(channel);
+
+      el.querySelector(".volume").value = saved.volume ?? 100;
+      el.querySelector(".volume-value").textContent =
+        (saved.volume ?? 100) + "%";
+      el.querySelector(".loop-check").checked = !!saved.loop;
+
+      if (saved.file) {
+        await loadFile(
+          channel,
+          saved.file,
+          el,
+          el.querySelector(".file-name")
+        );
+
+        channel.position = Number(saved.position) || 0;
+
+        try {
+          if (channel.audio) {
+            channel.audio.currentTime = channel.position;
+          }
+        } catch {}
+
+        updateSeekUI(channel, el);
+      }
+    }
+
+    addAddButton();
+    resetMonitor();
+    nowPlaying.textContent = "—";
+    nowStatus.textContent = "No channel selected";
+    setSaveStatus("LOADED");
+  } catch (e) {
+    console.error(e);
+    setSaveStatus("ERROR");
+    alert("読み込みに失敗しました。");
+  }
+}
+
+function newProject() {
+  if (currentChannel) stopChannel(currentChannel);
+
+  for (const c of channels) {
+    if (c.url) URL.revokeObjectURL(c.url);
+  }
+
+  channels = [];
+  currentChannel = null;
+  channelId = 0;
+  channelsContainer.innerHTML = "";
+
+  addChannel();
+  addChannel();
+  addChannel();
+  addChannel();
+
+  resetMonitor();
+  nowPlaying.textContent = "—";
+  nowStatus.textContent = "No channel selected";
+  setSaveStatus("NEW");
+}
+
+document.getElementById("saveProject")
+  .addEventListener("click", saveProject);
+
+document.getElementById("loadProject")
+  .addEventListener("click", loadProject);
+
+document.getElementById("newProject")
+  .addEventListener("click", newProject);
+
+/* =========================================================
+   PROJECT EXPORT / IMPORT (.ryup)
+   GitHub Pages compatible - files are packed into one JSON
+   project file using base64-encoded media blobs.
+   ========================================================= */
+
+const RYUP_FORMAT = "RYU-PONDA-PROJECT";
+const RYUP_VERSION = 1;
+
+function fileToDataURL(file) {
+  return new Promise((resolve, reject) => {
+    const reader = new FileReader();
+    reader.onload = () => resolve(reader.result);
+    reader.onerror = () => reject(reader.error);
+    reader.readAsDataURL(file);
+  });
+}
+
+function dataURLToFile(dataURL, fileName, fileType) {
+  const parts = dataURL.split(",");
+  const mime = fileType || (parts[0].match(/:(.*?);/) || [])[1] || "application/octet-stream";
+  const binary = atob(parts[1]);
+  const bytes = new Uint8Array(binary.length);
+  for (let i = 0; i < binary.length; i++) bytes[i] = binary.charCodeAt(i);
+  return new File([bytes], fileName || "file", { type: mime });
+}
+
+async function exportProject() {
+  try {
+    setSaveStatus("EXPORTING");
+
+    const project = {
+      format: RYUP_FORMAT,
+      version: RYUP_VERSION,
+      app: "RYU PONDA",
+      exportedAt: new Date().toISOString(),
+      channels: []
+    };
+
+    for (const channel of channels) {
+      const el = document.querySelector(`.channel[data-id="${channel.id}"]`);
+      const item = {
+        id: channel.id,
+        fileName: channel.file ? channel.file.name : null,
+        fileType: channel.fileType || (channel.file ? channel.file.type : null),
+        volume: el ? Number(el.querySelector(".volume").value) : 100,
+        loop: !!channel.loop,
+        position: Number(channel.position) || 0,
+        fileData: null
+      };
+
+      if (channel.file) {
+        item.fileData = await fileToDataURL(channel.file);
+      }
+
+      project.channels.push(item);
+    }
+
+    const json = JSON.stringify(project);
+    const blob = new Blob([json], { type: "application/x-ryu-ponda" });
+    const url = URL.createObjectURL(blob);
+    const a = document.createElement("a");
+    a.href = url;
+    a.download = `RYU-PONDA_${new Date().toISOString().slice(0,10)}.ryup`;
+    document.body.appendChild(a);
+    a.click();
+    a.remove();
+    setTimeout(() => URL.revokeObjectURL(url), 1000);
+
+    setSaveStatus("EXPORTED");
+  } catch (e) {
+    console.error(e);
+    setSaveStatus("ERROR");
+    alert("EXPORTに失敗しました。ファイルサイズが大きすぎる可能性があります。");
+  }
+}
+
+async function importProject(file) {
+  try {
+    if (!file) return;
+    setSaveStatus("IMPORTING");
+
+    const text = await file.text();
+    const project = JSON.parse(text);
+
+    if (project.format !== RYUP_FORMAT) {
+      throw new Error("Invalid RYU PONDA project file");
+    }
+    if (!Array.isArray(project.channels)) {
+      throw new Error("Invalid channel data");
+    }
+
+    if (currentChannel) stopChannel(currentChannel);
+
+    for (const c of channels) {
+      if (c.url) URL.revokeObjectURL(c.url);
+    }
+
+    channels = [];
+    currentChannel = null;
+    channelId = 0;
+    channelsContainer.innerHTML = "";
+
+    for (const saved of project.channels) {
+      const channel = {
+        id: Number(saved.id),
+        file: null,
+        url: null,
+        audio: null,
+        source: null,
+        gain: null,
+        playing: false,
+        loop: !!saved.loop,
+        fading: false,
+        fileType: saved.fileType || null,
+        buffer: null,
+        position: Number(saved.position) || 0
+      };
+
+      channels.push(channel);
+      channelId = Math.max(channelId, channel.id);
+
+      const el = renderChannel(channel);
+      el.querySelector(".volume").value = saved.volume ?? 100;
+      el.querySelector(".volume-value").textContent = (saved.volume ?? 100) + "%";
+      el.querySelector(".loop-check").checked = !!saved.loop;
+
+      if (saved.fileData) {
+        const restoredFile = dataURLToFile(
+          saved.fileData,
+          saved.fileName,
+          saved.fileType
+        );
+
+        await loadFile(
+          channel,
+          restoredFile,
+          el,
+          el.querySelector(".file-name")
+        );
+
+        channel.position = Number(saved.position) || 0;
+        try {
+          if (channel.audio) channel.audio.currentTime = channel.position;
+        } catch {}
+        updateSeekUI(channel, el);
+      }
+    }
+
+    addAddButton();
+    resetMonitor();
+    nowPlaying.textContent = "—";
+    nowStatus.textContent = "No channel selected";
+    setSaveStatus("IMPORTED");
+  } catch (e) {
+    console.error(e);
+    setSaveStatus("ERROR");
+    alert("IMPORTに失敗しました。RYU PONDAの .ryup ファイルを選択してください。");
+  }
+}
+
+document.getElementById("exportProject")
+  .addEventListener("click", exportProject);
+
+document.getElementById("importProject")
+  .addEventListener("click", () => {
+    document.getElementById("importFile").click();
+  });
+
+document.getElementById("importFile")
+  .addEventListener("change", async (event) => {
+    const file = event.target.files[0];
+    await importProject(file);
+    event.target.value = "";
+  });
+
+
+/* =========================================================
+   INITIAL CHANNELS
+   ========================================================= */
+
+addChannel();
+addChannel();
+addChannel();
+addChannel();
+
+
+/* =========================================================
+   ADD CHANNEL BUTTON
+   ========================================================= */
+
+function addAddButton() {
+  const old = channelsContainer.querySelector(".add-channel");
+  if (old) old.remove();
+
+  const addButton = document.createElement("button");
+  addButton.className = "add-channel";
+  addButton.textContent = "+ CHANNEL";
+  addButton.addEventListener("click", addChannel);
+  channelsContainer.appendChild(addButton);
+}
+
+
+
+addAddButton();
+
+
+/* =========================================================
+   AUDIO ENDED
+   ========================================================= */
+
+setInterval(() => {
+
+  for (const channel of channels) {
+
+    if (
+      channel.audio &&
+      channel.playing &&
+      channel.audio.ended &&
+      !channel.loop
+    ) {
+
+      channel.position = 0;
+      stopChannel(channel);
+
+    }
+
+  }
+
+}, 100);
+
+
+/* =========================================================
+   PREVENT ACCIDENTAL PAGE DRAG
+   ========================================================= */
+
+document.addEventListener("dragstart", e => {
+  e.preventDefault();
+});
+
+</script>
+
+</body>
+</html>
