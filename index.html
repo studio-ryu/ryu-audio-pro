@@ -501,7 +501,7 @@ label {
 <body>
 
 <header class="header">
-  <div class="logo">RYU PONDA</div>
+  <div class="logo">AUDIO PRO</div>
   <div class="status" id="systemStatus">READY</div>
   <div class="project-controls">
     <button id="saveProject">SAVE</button>
@@ -537,7 +537,7 @@ label {
 </section>
 
 <footer class="footer">
-  <span>RYU PONDA · WEB AUDIO PLAYER</span>
+  <span>AUDIO PRO · WEB AUDIO PLAYER</span>
 
   <div class="master">
     <span>MASTER</span>
@@ -549,7 +549,7 @@ label {
 
 <script>
 /* =========================================================
-   RYU PONDA
+   AUDIO PRO
    Simple browser sound cue system
    ========================================================= */
 
@@ -1391,7 +1391,7 @@ function animateWaveform(channel, element) {
    PROJECT SAVE / LOAD
    ========================================================= */
 
-const DB_NAME = "RYU_PONDA_DB";
+const DB_NAME = "AUDIO_PRO_DB";
 const DB_VERSION = 1;
 const STORE_NAME = "project";
 
@@ -1580,7 +1580,7 @@ document.getElementById("newProject")
    project file using base64-encoded media blobs.
    ========================================================= */
 
-const RYUP_FORMAT = "RYU-PONDA-PROJECT";
+const RYUP_FORMAT = "AUDIO-PRO-PROJECT";
 const RYUP_VERSION = 1;
 
 function fileToDataURL(file) {
@@ -1608,7 +1608,7 @@ async function exportProject() {
     const project = {
       format: RYUP_FORMAT,
       version: RYUP_VERSION,
-      app: "RYU PONDA",
+      app: "AUDIO PRO",
       exportedAt: new Date().toISOString(),
       channels: []
     };
@@ -1633,11 +1633,11 @@ async function exportProject() {
     }
 
     const json = JSON.stringify(project);
-    const blob = new Blob([json], { type: "application/x-ryu-ponda" });
+    const blob = new Blob([json], { type: "application/x-audio-pro" });
     const url = URL.createObjectURL(blob);
     const a = document.createElement("a");
     a.href = url;
-    a.download = `RYU-PONDA_${new Date().toISOString().slice(0,10)}.ryup`;
+    a.download = `AUDIO-PRO_${new Date().toISOString().slice(0,10)}.ryup`;
     document.body.appendChild(a);
     a.click();
     a.remove();
@@ -1660,7 +1660,7 @@ async function importProject(file) {
     const project = JSON.parse(text);
 
     if (project.format !== RYUP_FORMAT) {
-      throw new Error("Invalid RYU PONDA project file");
+      throw new Error("Invalid AUDIO PRO project file");
     }
     if (!Array.isArray(project.channels)) {
       throw new Error("Invalid channel data");
@@ -1731,7 +1731,7 @@ async function importProject(file) {
   } catch (e) {
     console.error(e);
     setSaveStatus("ERROR");
-    alert("IMPORTに失敗しました。RYU PONDAの .ryup ファイルを選択してください。");
+    alert("IMPORTに失敗しました。AUDIO PROの .ryup ファイルを選択してください。");
   }
 }
 
